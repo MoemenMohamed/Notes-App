@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/database/sqflite.dart';
+import 'package:flutter_application_1/core/service_locator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'App/my_app.dart';
 
-void main(){
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  setup();
+  getIt<MyDataBase>().insertNote(noteTitle: "firstNote", noteBody: "dsfbdshf");
+  final data = await getIt<MyDataBase>().getAllNotes();
+  print(data);
+  runApp(ProviderScope(child: const MyApp()));
 }
- 

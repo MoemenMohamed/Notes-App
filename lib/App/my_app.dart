@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../Views/home_view.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeView(),
+      home: Scaffold(),
       debugShowCheckedModeBanner: false,
     );
   }
