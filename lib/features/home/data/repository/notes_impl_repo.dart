@@ -14,4 +14,9 @@ class NotesImplRepo extends NotesBaseRepo {
     }
     return myNotes;
   }
+  
+  @override
+  deleteNote({required int id}) async{
+    await getIt<MyDataBase>().deleteNote(id: id);
+  }
 }

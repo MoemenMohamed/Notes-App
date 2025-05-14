@@ -1,5 +1,6 @@
 import 'package:flutter_application_1/core/service_locator.dart';
 import 'package:flutter_application_1/features/home/domain/entities/note_entity.dart';
+import 'package:flutter_application_1/features/home/domain/use_cases/delete_note_use_case.dart';
 import 'package:flutter_application_1/features/home/domain/use_cases/fetch_notes_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -26,6 +27,16 @@ class NoteNotifier extends StateNotifier<NoteRequest> {
     } on Exception catch (e) {
       state = NoteRequest(
           notes: [], notesStatus: Status.error, error: "error occured $e");
+    }
+  }
+
+  deleteNote({required int id}) async {
+    try {
+      await getIt<DeleteNoteUseCase>().execute(id: id);
+      fetchNotes();
+    } on Exception catch (e) {
+      state = NoteRequest(
+          notes: state.notes, notesStatus: Status.error, error: "error deleting note: $e");
     }
   }
 }
