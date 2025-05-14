@@ -19,4 +19,9 @@ class NotesImplRepo extends NotesBaseRepo {
   deleteNote({required int id}) async{
     await getIt<MyDataBase>().deleteNote(id: id);
   }
+  
+  @override
+  addNote({required String title, required String body}) async{
+    await getIt<MyDataBase>().insertNote(noteTitle: title, noteBody: body);
+  }
 }

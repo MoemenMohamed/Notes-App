@@ -3,4 +3,5 @@ import 'package:flutter_application_1/features/home/domain/entities/note_entity.
 abstract class NotesBaseRepo {
   Future<List<NoteEntity>> fetchAllNotes();
   deleteNote({required int id});
+  addNote({required String title, required String body});
 }

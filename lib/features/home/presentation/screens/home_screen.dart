@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/app_router.dart';
 import 'package:flutter_application_1/features/home/presentation/controllers/notes_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -20,8 +22,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final notes = ref.watch(notesProvider);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add),),
-      appBar: AppBar(title: Text("Notes"),),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue.shade100,
+        onPressed: () {
+          context.pushNamed(AppRoutes.newNoteScreen);
+        },
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      appBar: AppBar(
+        title: Text("Notes"),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView.separated(
@@ -31,7 +42,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           itemBuilder: (context, index) {
             return NoteTile(
               noteTitle: notes.notes[index].title,
-              noteDetails: notes.notes[index].details,
               noteIndex: notes.notes[index].id,
             );
           },
@@ -44,12 +54,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 class NoteTile extends ConsumerWidget {
   final String noteTitle;
-  final String noteDetails;
   final int noteIndex;
   const NoteTile({
     super.key,
     required this.noteTitle,
-    required this.noteDetails,
     required this.noteIndex,
   });
 
@@ -61,9 +69,12 @@ class NoteTile extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Column(
-            children: [Text(noteTitle), Text(noteDetails)],
-          ),
+          SizedBox(
+              width: 80,
+              child: Text(
+                noteTitle,
+                overflow: TextOverflow.ellipsis,
+              )),
           IconButton(
               onPressed: () {
                 ref.watch(notesProvider.notifier).deleteNote(id: noteIndex);
