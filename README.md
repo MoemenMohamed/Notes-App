@@ -1,6 +1,6 @@
 # Notes
 
-Notes
+Notes App is a simple and efficient application that allows users to create, view, and manage personal notes. Built using Flutter and Riverpod, it features a clean interface, fast performance with local database storage (using SQLite), and seamless navigation between screens. Ideal for keeping track of ideas, tasks, and reminders.
 
 ## Getting Started
 
