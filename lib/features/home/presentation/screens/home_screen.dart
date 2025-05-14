@@ -22,6 +22,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final notes = ref.watch(notesProvider);
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.watch_later_outlined), label: "Clock"),
+      ]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue.shade100,
         onPressed: () {

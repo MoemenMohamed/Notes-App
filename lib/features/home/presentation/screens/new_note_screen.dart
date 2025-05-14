@@ -24,7 +24,9 @@ class _NewNoteScreenState extends ConsumerState<NewNoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("New Note"),),
+      appBar: AppBar(
+        title: Text("New Note"),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: Column(
@@ -33,7 +35,10 @@ class _NewNoteScreenState extends ConsumerState<NewNoteScreen> {
             Text("Title:"),
             TextField(
               style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.blue.shade100),
               minLines: 1,
               maxLines: 2,
               controller: titleController,
@@ -41,18 +46,33 @@ class _NewNoteScreenState extends ConsumerState<NewNoteScreen> {
             Text("Details:"),
             TextField(
               style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                  filled: true,
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.blue.shade100),
               minLines: 1,
               maxLines: 8,
               controller: detailsController,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  ref.read(notesProvider.notifier).addNote(
-                      title: titleController.text,
-                      body: detailsController.text);
-                },
-                child: Text("save"))
+            SizedBox(height: 20,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade100),
+                    onPressed: () {
+                      ref.read(notesProvider.notifier).addNote(
+                          title: titleController.text,
+                          body: detailsController.text);
+                      ref.read(notesProvider.notifier).fetchNotes();
+                    },
+                    child: Text(
+                      "save",
+                      style: TextStyle(color: Colors.black),
+                    )),
+              ],
+            )
           ],
         ),
       ),
