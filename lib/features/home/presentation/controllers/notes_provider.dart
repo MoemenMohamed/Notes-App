@@ -1,14 +1,16 @@
+import 'package:flutter_application_1/core/service_locator.dart';
 import 'package:flutter_application_1/features/home/domain/entities/note_entity.dart';
+import 'package:flutter_application_1/features/home/domain/use_cases/fetch_notes_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum Status { initial, loading, success, error }
 
 class NoteRequest {
-  final List<NoteEntity> notes;
-  final Status notesStatus;
-  final String? error;
+  List<NoteEntity> notes;
+  Status notesStatus;
+  String? error;
 
-  const NoteRequest({required this.notes, required this.notesStatus, this.error});
+  NoteRequest({required this.notes, required this.notesStatus, this.error});
   factory NoteRequest.initialState() {
     return NoteRequest(notes: [], notesStatus: Status.initial);
   }
@@ -16,6 +18,16 @@ class NoteRequest {
 
 class NoteNotifier extends StateNotifier<NoteRequest> {
   NoteNotifier() : super(NoteRequest.initialState());
+  fetchNotes() async {
+    state = NoteRequest(notes: [], notesStatus: Status.loading);
+    try {
+      final result = await getIt<FetchNotesUseCase>().execute();
+      state = NoteRequest(notes: result, notesStatus: Status.success);
+    } on Exception catch (e) {
+      state = NoteRequest(
+          notes: [], notesStatus: Status.error, error: "error occured $e");
+    }
+  }
 }
 
 final notesProvider = StateNotifierProvider<NoteNotifier, NoteRequest>((ref) {

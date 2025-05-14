@@ -7,7 +7,7 @@ import 'App/my_app.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   setup();
-  getIt<MyDataBase>().insertNote(noteTitle: "firstNote", noteBody: "dsfbdshf");
+  //getIt<MyDataBase>().insertNote(noteTitle: "firstNote", noteBody: "dsfbdshf");
   final data = await getIt<MyDataBase>().getAllNotes();
   print(data);
   runApp(ProviderScope(child: const MyApp()));
