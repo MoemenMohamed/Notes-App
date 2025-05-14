@@ -1,5 +1,6 @@
 import 'package:flutter_application_1/core/service_locator.dart';
 import 'package:flutter_application_1/features/home/domain/entities/note_entity.dart';
+import 'package:flutter_application_1/features/home/domain/use_cases/add_new_note_use_case.dart';
 import 'package:flutter_application_1/features/home/domain/use_cases/delete_note_use_case.dart';
 import 'package:flutter_application_1/features/home/domain/use_cases/fetch_notes_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,8 +37,14 @@ class NoteNotifier extends StateNotifier<NoteRequest> {
       fetchNotes();
     } on Exception catch (e) {
       state = NoteRequest(
-          notes: state.notes, notesStatus: Status.error, error: "error deleting note: $e");
+          notes: state.notes,
+          notesStatus: Status.error,
+          error: "error deleting note: $e");
     }
+  }
+
+  addNote({required String title, required String body}) async {
+    await getIt<AddNewNoteUseCase>().execute(title: title, body: body);
   }
 }
 
