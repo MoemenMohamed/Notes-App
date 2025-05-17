@@ -14,14 +14,27 @@ class NotesImplRepo extends NotesBaseRepo {
     }
     return myNotes;
   }
-  
+
   @override
-  deleteNote({required int id}) async{
+  deleteNote({required int id}) async {
     await getIt<MyDataBase>().deleteNote(id: id);
   }
-  
+
   @override
-  addNote({required String title, required String body}) async{
+  addNote({required String title, required String body}) async {
     await getIt<MyDataBase>().insertNote(noteTitle: title, noteBody: body);
+  }
+
+  @override
+  updateNote(
+      {required String noteTitle,
+      required String noteBody,
+      required int isFavourite,
+      required int noteIndex}) async {
+    await getIt<MyDataBase>().updateNote(
+        noteTitle: noteTitle,
+        noteBody: noteBody,
+        isFavourite: isFavourite,
+        noteIndex: noteIndex);
   }
 }

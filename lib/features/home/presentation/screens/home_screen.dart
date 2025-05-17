@@ -12,6 +12,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final GlobalKey<AnimatedListState> listkey = GlobalKey<AnimatedListState>();
   @override
   void initState() {
     super.initState();
@@ -25,7 +26,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(items: [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
         BottomNavigationBarItem(
-            icon: Icon(Icons.watch_later_outlined), label: "Clock"),
+            icon: Icon(Icons.favorite_outlined), label: "Favourites"),
       ]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue.shade100,
@@ -42,10 +43,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView.separated(
           separatorBuilder: (context, index) => SizedBox(
-            height: 25,
+            height: 20,
           ),
+          key: listkey,
           itemBuilder: (context, index) {
             return NoteTile(
+              isFavourite: notes.notes[index].isFavourite,
               noteTitle: notes.notes[index].title,
               noteIndex: notes.notes[index].id,
             );
@@ -60,11 +63,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class NoteTile extends ConsumerWidget {
   final String noteTitle;
   final int noteIndex;
-  const NoteTile({
-    super.key,
-    required this.noteTitle,
-    required this.noteIndex,
-  });
+  int isFavourite;
+  NoteTile(
+      {super.key,
+      required this.noteTitle,
+      required this.noteIndex,
+      required this.isFavourite});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +79,7 @@ class NoteTile extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           SizedBox(
-              width: 80,
+              width: 120,
               child: Text(
                 noteTitle,
                 overflow: TextOverflow.ellipsis,
@@ -85,7 +89,16 @@ class NoteTile extends ConsumerWidget {
                 ref.watch(notesProvider.notifier).deleteNote(id: noteIndex);
               },
               icon: Icon(Icons.delete)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.favorite))
+          IconButton(
+              onPressed: () {
+                isFavourite == 1 ? isFavourite = 0 : isFavourite = 1;
+                ref
+                    .watch(notesProvider.notifier)
+                    .updateNote(noteIndex: noteIndex,isFavourite: isFavourite);
+              },
+              icon: isFavourite == 1
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_border))
         ],
       ),
     );

@@ -54,7 +54,9 @@ class _NewNoteScreenState extends ConsumerState<NewNoteScreen> {
               maxLines: 8,
               controller: detailsController,
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -65,7 +67,8 @@ class _NewNoteScreenState extends ConsumerState<NewNoteScreen> {
                       ref.read(notesProvider.notifier).addNote(
                           title: titleController.text,
                           body: detailsController.text);
-                      ref.read(notesProvider.notifier).fetchNotes();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Note Added Succefully")));
                     },
                     child: Text(
                       "save",
