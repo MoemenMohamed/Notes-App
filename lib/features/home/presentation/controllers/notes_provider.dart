@@ -3,6 +3,7 @@ import 'package:flutter_application_1/features/home/domain/entities/note_entity.
 import 'package:flutter_application_1/features/home/domain/use_cases/add_new_note_use_case.dart';
 import 'package:flutter_application_1/features/home/domain/use_cases/delete_note_use_case.dart';
 import 'package:flutter_application_1/features/home/domain/use_cases/fetch_notes_use_case.dart';
+import 'package:flutter_application_1/features/home/domain/use_cases/update_note_use_case.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum Status { initial, loading, success, error }
@@ -45,6 +46,33 @@ class NoteNotifier extends StateNotifier<NoteRequest> {
 
   addNote({required String title, required String body}) async {
     await getIt<AddNewNoteUseCase>().execute(title: title, body: body);
+    fetchNotes();
+  }
+
+  updateNote(
+      {String? noteTitle,
+      String? noteBody,
+      int? isFavourite,
+      required int noteIndex}) async {
+    final existingData = state.notes.firstWhere(
+      (element) => noteIndex == element.id,
+    );
+    final updatedNotes = List<NoteEntity>.from(state.notes);
+    await getIt<UpdateNoteUseCase>().execute(
+        noteTitle: noteTitle ?? existingData.title,
+        noteBody: noteBody ?? existingData.details,
+        isFavourite: isFavourite ?? existingData.isFavourite,
+        noteIndex: noteIndex);
+    final updatedNote = NoteEntity(
+      details: noteBody ?? existingData.details,
+      id: existingData.id,
+      title: noteTitle ?? existingData.title,
+      isFavourite: isFavourite ?? existingData.isFavourite,
+    );
+    int index =
+        updatedNotes.indexWhere((element) => element.id == updatedNote.id);
+    updatedNotes[index] = updatedNote;
+    state = NoteRequest(notes: updatedNotes, notesStatus: Status.success);
   }
 }
 

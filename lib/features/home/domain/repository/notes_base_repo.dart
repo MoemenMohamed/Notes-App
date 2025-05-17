@@ -4,4 +4,9 @@ abstract class NotesBaseRepo {
   Future<List<NoteEntity>> fetchAllNotes();
   deleteNote({required int id});
   addNote({required String title, required String body});
+  updateNote(
+      {required String noteTitle,
+      required String noteBody,
+      required int isFavourite,
+      required int noteIndex});
 }
